@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  mecab-api:
+    build: ./
+    tty: true
+    ports:
+      - "5000:3001"
