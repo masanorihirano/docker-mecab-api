@@ -3,6 +3,13 @@
 docker-composeだけで動かせるサービス．
 
 # 起動・終了方法
+## Docker Hubからpullする場合(推奨)
+```
+docker run -it -d -p 5000:3001 mhirano/mecab-api
+```
+ただし，ポート番号を変更する場合は，5000の部分を変更してください．
+
+## gitからcloneする場合
 起動
 ```
 docker-compose up -d
