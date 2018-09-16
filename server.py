@@ -9,23 +9,45 @@ api = Flask(__name__)
 api.config['JSON_AS_ASCII'] = False
 
 @api.route('/mecab/v1/wakachi', methods=['POST'])
-def wakachi():
+def wakachi_post():
+    if not request.json:
+        abort(400)
+    return wakachi(request.json)
+
+@api.route('/mecab/v1/wakachi', methods=['GET'])
+def wakachi_get():
+    if not request.args:
+        abort(400)
+    return wakachi(request.args)
+
+@api.route('/mecab/v1/analysis', methods=['POST'])
+def analysis_post():
+    if not request.json:
+        abort(400)
+    return analysis(request.json)
+
+@api.route('/mecab/v1/analysis', methods=['GET'])
+def analysis_get():
+    if not request.args:
+        abort(400)
+    return analysis(request.args)
+
+def wakachi(target):
     try:
-        if not (request.json and 'sentence' in request.json):
+        if not ('sentence' in target):
             abort(400)
-        sentence = request.json['sentence']
-        result = mecab_wakachi.parse(sentence.encode("utf-8")).split(" ")[:-1]
-        return jsonify(wakachi=result,)
+        sentence = target['sentence'].encode("utf-8")
+        result = mecab_wakachi.parse(sentence).split(" ")[:-1]
+        return jsonify(wakachi=result)
     except Exception as e:
         print(e)
         abort(500)
 
-@api.route('/mecab/v1/analysis', methods=['POST'])
-def analysis():
+def analysis(target):
     try:
-        if not (request.json and 'sentence' in request.json):
+        if not ('sentence' in target):
             abort(400)
-        sentence = request.json['sentence'].encode("utf-8")
+        sentence = target['sentence'].encode("utf-8")
         analysis = mecab.parse(sentence)
         results = []
         for result in analysis.split("\n")[:-2]:
@@ -42,13 +64,24 @@ def analysis():
 # n-bestについては，なぜかpythonのラッパーで対応してないようなので，現時点ではコメントアウト．
 """
 @api.route('/mecab/v1/analysis/<int:n_best>', methods=['POST'])
-def analysis_n_best(n_best):
+def analysis_n_best_post():
+    if not request.json:
+        abort(400)
+    return analysis(n_best, request.json)
+
+@api.route('/mecab/v1/analysis/<int:n_best>', methods=['POST'])
+def analysis_n_best_get():
+    if not request.args:
+        abort(400)
+    return analysis(n_best, request.args)
+
+def analysis_n_best(n_best,target):
     try:
         if n_best <= 0:
             bad_url()
-        if not (request.json and 'sentence' in request.json):
+        if not ('sentence' in target):
             abort(400)
-        sentence = request.json['sentence'].encode("utf-8")
+        sentence = target.json['sentence'].encode("utf-8")
         MeCab_n_best = MeCab.Tagger("-N"+str(n_best))
         analysis = MeCab_n_best.parse(sentence)
         results = []

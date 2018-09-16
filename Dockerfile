@@ -8,12 +8,12 @@ RUN git clone https://github.com/taku910/mecab.git && \
     cd mecab/mecab && \
     ./configure --with-charset=utf8 && \
     make && \
-    make install ; exit 0 && \
-    ldconfig && \
+    make install && \
     cd ../mecab-ipadic && \
     ./configure --with-charset=utf8 && \
     make && \
     make install && \
+    cd ../.. && \
     rm -r mecab
 COPY requirements.txt .
 RUN pip install -r requirements.txt
