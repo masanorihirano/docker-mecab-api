@@ -168,4 +168,4 @@ curl -H 'Content-Type:application/json' localhost:5000/mecab/v1/analysis -d '{"s
 ```
 
 # Copyright
-Copyright &copy; 2017-2018 · All rights reserved. · [Masanori HIRANO](https://mhirano.jp/)
+Copyright &copy; 2018 · All rights reserved. · [Masanori HIRANO](https://mhirano.jp/)
