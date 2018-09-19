@@ -1,6 +1,7 @@
 # coding: utf-8
 from flask import Flask, abort, jsonify, request
 import MeCab
+import urllib
 
 mecab_wakati = MeCab.Tagger("-Owakati")
 mecab = MeCab.Tagger()
@@ -20,6 +21,18 @@ def wakati_get():
         abort(400)
     return wakati(request.args)
 
+@api.route('/mecab/v1/original/wakati', methods=['POST'])
+def wakati_original_post():
+    if not request.json:
+        abort(400)
+    return wakati_original(request.json)
+
+@api.route('/mecab/v1/original/wakati', methods=['GET'])
+def wakati_original_get():
+    if not request.args:
+        abort(400)
+    return wakati_original(request.args)
+
 @api.route('/mecab/v1/analysis', methods=['POST'])
 def analysis_post():
     if not request.json:
@@ -32,6 +45,18 @@ def analysis_get():
         abort(400)
     return analysis(request.args)
 
+@api.route('/mecab/v1/original/analysis', methods=['POST'])
+def analysis_original_post():
+    if not request.json:
+        abort(400)
+    return analysis_original(request.json)
+
+@api.route('/mecab/v1/original/analysis', methods=['GET'])
+def analysis_original_get():
+    if not request.args:
+        abort(400)
+    return analysis_original(request.args)
+
 def wakati(target):
     try:
         if not ('sentence' in target):
@@ -39,6 +64,16 @@ def wakati(target):
         sentence = target['sentence'].encode("utf-8")
         result = mecab_wakati.parse(sentence).split(" ")[:-1]
         return jsonify(wakati=result)
+    except Exception as e:
+        print(e)
+        abort(500)
+
+def wakati_original(target):
+    try:
+        if not ('sentence' in target):
+            abort(400)
+        sentence = target['sentence'].encode("utf-8")
+        return mecab_wakati.parse(sentence)
     except Exception as e:
         print(e)
         abort(500)
@@ -57,6 +92,16 @@ def analysis(target):
                             '品詞細分類3':result5, '活用形':result6, '活用型':result7,'原型':result8,
                             '読み':result9,'発音':result10})
         return jsonify(analysis=results)
+    except Exception as e:
+        print(e)
+        abort(500)
+
+def analysis_original(target):
+    try:
+        if not ('sentence' in target):
+            abort(400)
+        sentence = target['sentence'].encode("utf-8")
+        return mecab.parse(sentence)
     except Exception as e:
         print(e)
         abort(500)
