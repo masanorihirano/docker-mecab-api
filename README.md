@@ -194,5 +194,42 @@ curl http://localhost:5000/mecab/v1/analysis?sentence=すももももももも�
 }
 ```
 
+## オリジナルモード
+```/mecab/v1/original/wakati```および````/mecab/v1/oroginal/analysis```を利用することで，
+実際のコマンドでの出力と同じものを出力できます．
+利用方法は変わりません．
+
+### 便利な使い方
+```
+function mecab () {
+    VALUE_O=""
+    for OPT in "$@"
+    do
+        case $OPT in
+            '-O' )
+                VALUE_O=$2
+                shift 2
+                ;;
+            '-Owakati' )
+                VALUE_O="wakati"
+                shift
+                ;;
+        esac
+        shift
+    done
+    read sentence
+    if [ "$VALUE_O" = "wakati" ]; then
+        curl -H 'Content-Type:application/json' \
+            localhost:5000/mecab/v1/original/wakati \
+            -d '{"sentence":"'$sentence'"}' -XPOST;
+    else
+        curl -H 'Content-Type:application/json' \
+            localhost:5000/mecab/v1/original/analysis \
+            -d '{"sentence":"'$sentence'"}' -XPOST;
+    fi
+}
+```
+などと定義すれば，MeCabをDockerだけのインストールで呼び出せるようになります．.bash_profileなどに書き込むと便利かもしれません．
+
 # Copyright
 Copyright &copy; 2018 · All rights reserved. · [Masanori HIRANO](https://mhirano.jp/)
