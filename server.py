@@ -2,23 +2,23 @@
 from flask import Flask, abort, jsonify, request
 import MeCab
 
-mecab_wakachi = MeCab.Tagger("-Owakati")
+mecab_wakati = MeCab.Tagger("-Owakati")
 mecab = MeCab.Tagger()
 
 api = Flask(__name__)
 api.config['JSON_AS_ASCII'] = False
 
-@api.route('/mecab/v1/wakachi', methods=['POST'])
-def wakachi_post():
+@api.route('/mecab/v1/wakati', methods=['POST'])
+def wakati_post():
     if not request.json:
         abort(400)
-    return wakachi(request.json)
+    return wakati(request.json)
 
-@api.route('/mecab/v1/wakachi', methods=['GET'])
-def wakachi_get():
+@api.route('/mecab/v1/wakati', methods=['GET'])
+def wakati_get():
     if not request.args:
         abort(400)
-    return wakachi(request.args)
+    return wakati(request.args)
 
 @api.route('/mecab/v1/analysis', methods=['POST'])
 def analysis_post():
@@ -32,13 +32,13 @@ def analysis_get():
         abort(400)
     return analysis(request.args)
 
-def wakachi(target):
+def wakati(target):
     try:
         if not ('sentence' in target):
             abort(400)
         sentence = target['sentence'].encode("utf-8")
-        result = mecab_wakachi.parse(sentence).split(" ")[:-1]
-        return jsonify(wakachi=result)
+        result = mecab_wakati.parse(sentence).split(" ")[:-1]
+        return jsonify(wakati=result)
     except Exception as e:
         print(e)
         abort(500)

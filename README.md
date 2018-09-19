@@ -29,40 +29,40 @@ docker-compose down
 # 使用方法
 ## わかち書きモード
 ### 実行方法
-```/mecab/v1/wakahi```に
+```/mecab/v1/wakati```に
 ```
 {"sentence":"日本語の文章"}
 ```
 をpostすると，
 ```
-{"wakachi":["日本語","の","文章"]}
+{"wakati":["日本語","の","文章"]}
 ```
 のようにわかち書きされて配列で返ってきます．
 
 あるいは
 ```
-/mecab/vi/wakachi?sentence=日本語の文章
+/mecab/vi/wakati?sentence=日本語の文章
 ```
 でも解析できます．
 
 ### テストコード
 ```
-curl -H 'Content-Type:application/json' localhost:5000/mecab/v1/wakachi -d '{"sentence":"すもももももももものうち"}' -XPOST
+curl -H 'Content-Type:application/json' localhost:5000/mecab/v1/wakati -d '{"sentence":"すもももももももものうち"}' -XPOST
 ```
 または
 ```
-curl http://localhost:5000/mecab/v1/wakachi?sentence=すもももももももものうち
+curl http://localhost:5000/mecab/v1/wakati?sentence=すもももももももものうち
 ```
 またはブラウザで上記のアドレスにアクセス
 
 結果:
 ```
-{"wakachi":["すもも","も","もも","も","もも","の","うち"]}
+{"wakati":["すもも","も","もも","も","もも","の","うち"]}
 ```
 整形後:
 ```
 {
-	"wakachi": [
+	"wakati": [
 		"すもも",
 		"も",
 		"もも",
