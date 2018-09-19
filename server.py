@@ -1,7 +1,6 @@
 # coding: utf-8
 from flask import Flask, abort, jsonify, request
 import MeCab
-import urllib
 
 mecab_wakati = MeCab.Tagger("-Owakati")
 mecab = MeCab.Tagger()
